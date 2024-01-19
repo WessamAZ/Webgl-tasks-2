@@ -194,17 +194,17 @@ function updateMaterialSelector(env, value) {
 
     if (value in env.settings.materials) {
         const m = env.settings.materials[value];
-        if (m.shininess != undefined) {
+        if (m.x_position != undefined) {
             env.ui.materialPropertiesPane.addBinding(m, "x_position", {
                 min: 1.0, max: 100.0
             });
         }
-        if (m.shininess != undefined) {
+        if (m.y_position != undefined) {
             env.ui.materialPropertiesPane.addBinding(m, "y_position", {
                 min: 1.0, max: 100.0
             });
         }
-        if (m.shininess != undefined) {
+        if (m.z_position != undefined) {
             env.ui.materialPropertiesPane.addBinding(m, "z_position", {
                 min: 1.0, max: 100.0
             });
