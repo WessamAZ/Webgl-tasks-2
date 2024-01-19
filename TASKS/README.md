@@ -41,6 +41,7 @@ The fragment shader outputs the final color for each pixel.
 - we will add the parameter a_texcoord to vs section.
 - then update the finalColor in fs section and use texturing function.
 
+
 ### Assignment 2b
 <!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
 

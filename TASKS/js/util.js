@@ -198,7 +198,8 @@ function updateMaterialSelector(env, value) {
             env.ui.materialPropertiesPane.addBinding(m, "x_position", {
                 min: 1.0, max: 100.0
             });
-        }
+        } 
+        
         if (m.y_position != undefined) {
             env.ui.materialPropertiesPane.addBinding(m, "y_position", {
                 min: 1.0, max: 100.0
