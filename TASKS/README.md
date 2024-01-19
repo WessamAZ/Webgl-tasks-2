@@ -36,7 +36,10 @@ The fragment shader outputs the final color for each pixel.
 ## Assignment 2
 
 ### Assignment 2a
-<!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
+- The ambientMap, diffuseMap, and specularMap parameters aare already exist in the matireal page.
+- after the user insert the map we can use it to do texturing.
+- we will add the parameter a_texcoord to vs section.
+- then update the finalColor in fs section and use texturing function.
 
 ### Assignment 2b
 <!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
