@@ -26,7 +26,8 @@ The fragment shader outputs the final color for each pixel.
 2- Calculate the outcolor in fragment shader depends on ambient,diffuseColor,specularColor and shininess. 
 
 ### Assigment 1b
-<!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
+- I add X, Y , and Z controler parameters to the material page with the ambient, diffuse, and specular contributions parameters contollers.
+- use those variables in the section vs and fs to update the light position and other parameters.
 
 ### Assigment 1 Extras
 <!-- Describe any extra features that you implemented. Make sure to cite your sources. -->

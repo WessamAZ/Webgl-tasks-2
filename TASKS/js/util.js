@@ -2,7 +2,9 @@
 function setupInterface(env) {
     env.controller = arcballController(env.gl.canvas, env);
 
-    env.ui.rootPane = new Pane({ title: "Parameters", container: document.querySelector("#pane") });
+    env.ui.rootPane = new Pane({ title: "Parameters",
+     container: document.querySelector("#pane"),
+     expanded: true });
 
     const tab = env.ui.rootPane.addTab({
         pages: [
@@ -192,7 +194,21 @@ function updateMaterialSelector(env, value) {
 
     if (value in env.settings.materials) {
         const m = env.settings.materials[value];
-
+        if (m.shininess != undefined) {
+            env.ui.materialPropertiesPane.addBinding(m, "x_position", {
+                min: 1.0, max: 100.0
+            });
+        }
+        if (m.shininess != undefined) {
+            env.ui.materialPropertiesPane.addBinding(m, "y_position", {
+                min: 1.0, max: 100.0
+            });
+        }
+        if (m.shininess != undefined) {
+            env.ui.materialPropertiesPane.addBinding(m, "z_position", {
+                min: 1.0, max: 100.0
+            });
+        }
         if (m.ambient != undefined) {
             m.ambient = makeColor(m.ambient);
             env.ui.materialPropertiesPane.addBinding(m, "ambient", {
@@ -223,7 +239,7 @@ function updateMaterialSelector(env, value) {
 
         if (m.shininess != undefined) {
             env.ui.materialPropertiesPane.addBinding(m, "shininess", {
-                min: 0.0, max: 1000.0
+                min: 1.0, max: 1000.0
             });
         }
 
