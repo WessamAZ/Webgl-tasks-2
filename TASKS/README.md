@@ -43,8 +43,7 @@ The fragment shader outputs the final color for each pixel.
 
 
 ### Assignment 2b
-<!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
-
+- add the mapbump to the fs section then use it after texturing in the normal variable then use this normal in the code as previous. (we calculate the tanent matrex in vs "twMatrex").
 ### Assignment 2c
 <!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
 
