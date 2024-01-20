@@ -45,8 +45,8 @@ The fragment shader outputs the final color for each pixel.
 ### Assignment 2b
 - add the mapbump to the fs section then use it after texturing in the normal variable then use this normal in the code as previous. (we calculate the tanent matrex in vs "twMatrex").
 ### Assignment 2c
-<!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
-
+- I add procedural bump mapping control parameters (bump_Amplitude,bump_Frequency,bump_Intensity) to the material page.
+-Then calculate Compensation ratio in fs function to use to calculate the normalization of pumb to use it in the parameter that form the final color.
 ### Assigment 2 Extras
 <!-- Describe any extra features that you implemented. Make sure to cite your sources. -->
 

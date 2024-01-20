@@ -4,7 +4,7 @@ function setupInterface(env) {
 
     env.ui.rootPane = new Pane({ title: "Parameters",
      container: document.querySelector("#pane"),
-     expanded: true });
+     expanded: false });
 
     const tab = env.ui.rootPane.addTab({
         pages: [
@@ -150,6 +150,22 @@ function setupBindings(env) {
         label: "Perspective",
     });
 
+    // env.ui.settingsPane.addBinding(env.settings, "bump_Intensity", {
+    //     label: "bump_Intensity",
+    //     min: 0.0, max: 1.0
+    // });
+
+    // env.ui.settingsPane.addBinding(env.settings, "bump_Frequency", {
+    //     label: "bump_Frequency",
+    //     min: 1.0, max: 100.0
+    // });
+
+    // env.ui.settingsPane.addBinding(env.settings, "bump_Amplitude", {
+    //     label: "bump_Amplitude",
+    //     min: 0.0, max: 1.0
+    // });
+
+
     env.ui.objectPropertiesPane = env.ui.objectsPane.addFolder({
         title: "Properties",
         expanded: true
@@ -194,6 +210,7 @@ function updateMaterialSelector(env, value) {
 
     if (value in env.settings.materials) {
         const m = env.settings.materials[value];
+        
         if (m.x_position != undefined) {
             env.ui.materialPropertiesPane.addBinding(m, "x_position", {
                 min: 1.0, max: 100.0
@@ -210,6 +227,22 @@ function updateMaterialSelector(env, value) {
                 min: 1.0, max: 100.0
             });
         }
+        if (m.bump_Intensity != undefined) {
+            env.ui.materialPropertiesPane.addBinding(m, "bump_Intensity", {
+                min: 0.0, max: 1.0
+            });
+        }
+        if (m.bump_Frequency != undefined) {
+            env.ui.materialPropertiesPane.addBinding(m, "bump_Frequency", {
+                min: 1.0, max: 100.0
+            });
+        }
+        if (m.bump_Amplitude != undefined) {
+            env.ui.materialPropertiesPane.addBinding(m, "bump_Amplitude", {
+                min: 0.0, max: 1.0
+            });
+        }
+        
         if (m.ambient != undefined) {
             m.ambient = makeColor(m.ambient);
             env.ui.materialPropertiesPane.addBinding(m, "ambient", {
@@ -243,6 +276,7 @@ function updateMaterialSelector(env, value) {
                 min: 1.0, max: 1000.0
             });
         }
+        
         Object.entries(m)
             .filter(([key]) => !key.startsWith("_") && key.endsWith("Map"))
             .forEach(([key]) => {

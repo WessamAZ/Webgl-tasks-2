@@ -83,15 +83,23 @@
         uniform sampler2D diffuseMap;
         uniform sampler2D specularMap;
         uniform sampler2D bumpMap;
+
+        uniform float bump_Intensity;
+        uniform float bump_Frequency;
+        uniform float bump_Amplitude;
+
         out vec4 outColor;
+
         void main() {
             vec3 normal   = normalize(normalize(twMatrix * texture(bumpMap, v_texcoord).xyz * 2.0 - 1.0));
+            float reimburse = sin(v_texcoord.x * bump_Frequency) * cos(v_texcoord.y * bump_Frequency) * bump_Amplitude * bump_Intensity;
+            vec3 normalize_pumb = normalize(normal + reimburse); 
             vec3 lightDir = normalize(v_lightDir);
-            float diff         = max(dot(normal, lightDir), 0.0);
+            float diff         = max(dot(normalize_pumb, lightDir), 0.0);
             vec3 viewDir       = normalize(-v_lightDir);
-            vec3 reflectDir    = reflect(-lightDir, normal);
+            vec3 reflectDir    = reflect(-lightDir, normalize_pumb);
             float spec         = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-
+            
             vec3 finalColor = ambient * texture(ambientMap, v_texcoord).rgb + 
                               diff    * texture(diffuseMap, v_texcoord).rgb + 
                               spec    * texture(specularMap, v_texcoord).rgb;
@@ -139,6 +147,9 @@
             x_position: 2.0,
             y_position: 2.0,
             z_position: 2.0,
+            bump_Intensity: 0.5,
+            bump_Frequency: 10.0,
+            bump_Amplitude: 1.0,
         };
 
         const environment = {
@@ -178,15 +189,15 @@
 
         // restore data and settings
         restoreSession(environment, function (env) {
-            // add any custom UI elements/input bindings here; make sure to add a proper default value to defaultSettings
-            // Assuming you have an HTML element to display the color value
-            const colorValueElement = document.getElementById('colorValue');
+            // // add any custom UI elements/input bindings here; make sure to add a proper default value to defaultSettings
+            // // Assuming you have an HTML element to display the color value
+            // const colorValueElement = document.getElementById('colorValue');
 
-            // Event listener to capture changes in the color input
-            myFolder.on('change', (value) => {
-                // Assuming 'color1' is a property of env.settings
-                const color1Value = env.settings.color1;
-            }); 
+            // // Event listener to capture changes in the color input
+            // myFolder.on('change', (value) => {
+            //     // Assuming 'color1' is a property of env.settings
+            //     const color1Value = env.settings.color1;
+            // });
         });
 
         // start the render loop
