@@ -91,18 +91,18 @@
         out vec4 outColor;
 
         void main() {
-            vec3 normal   = normalize(normalize(twMatrix * texture(bumpMap, v_texcoord).xyz * 2.0 - 1.0));
-            float reimburse = sin(v_texcoord.x * bump_Frequency) * cos(v_texcoord.y * bump_Frequency) * bump_Amplitude * bump_Intensity;
+            vec3 normal         = normalize(normalize(twMatrix * texture(bumpMap, v_texcoord).xyz * 2.0 - 1.0));
+            float reimburse     = sin(v_texcoord.x * bump_Frequency) * cos(v_texcoord.y * bump_Frequency) * bump_Amplitude * bump_Intensity;
             vec3 normalize_pumb = normalize(normal + reimburse); 
-            vec3 lightDir = normalize(v_lightDir);
-            float diff         = max(dot(normalize_pumb, lightDir), 0.0);
-            vec3 viewDir       = normalize(-v_lightDir);
-            vec3 reflectDir    = reflect(-lightDir, normalize_pumb);
-            float spec         = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+            vec3 lightDir       = normalize(v_lightDir);
+            float diff          = max(dot(normalize_pumb, lightDir), 0.0);
+            vec3 viewDir        = normalize(-v_lightDir);
+            vec3 reflectDir     = reflect(-lightDir, normalize_pumb);
+            float spec          = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
             
-            vec3 finalColor = ambient * texture(ambientMap, v_texcoord).rgb + 
-                              diff    * texture(diffuseMap, v_texcoord).rgb + 
-                              spec    * texture(specularMap, v_texcoord).rgb;
+            vec3 finalColor     = ambient * texture(ambientMap, v_texcoord).rgb + 
+                                  diff    * texture(diffuseMap, v_texcoord).rgb + 
+                                  spec    * texture(specularMap, v_texcoord).rgb;
             outColor = vec4(finalColor, 1.0);
         }
     </script>
@@ -125,11 +125,12 @@
         };
 
         // set up our default view matrix
-        const eye = [0, 0, 2.0 * Math.sqrt(3.0)];
-        const target = [0, 0, 0];
-        const up = [0, 1, 0];
+        var eye = [0, 0, 2.0 * Math.sqrt(3.0),100];
+        var target = [0, 0, 0];
+        var up = [0, 1, 0];
         defaultSettings.view = glMatrix.mat4.create();
         glMatrix.mat4.lookAt(defaultSettings.view, eye, target, up);
+
 
         // our default material
         const defaultMaterial = {
@@ -173,6 +174,8 @@
         };
 
         let previousTime = null;
+        var envViewPre = glMatrix.mat4.create();
+        var keyframes = [];
 
         // here we initialize our shaders
         twgl.setAttributePrefix("a_");
@@ -203,13 +206,33 @@
         // start the render loop
         requestAnimationFrame(render);
 
-        //
-        
+        function getCameraPosition() {
+            // Set the radius of the circular motion
+            var radius = 5;
+            // Calculate parameter 't' based on time or other factors
+            var t = (Math.sin(Date.now() * 0.0008) + 1) / 2;
+            var angle = t * 2 * Math.PI;
+            var x = radius * Math.cos(angle);
+            var y = radius * Math.sin(angle);
+            var z = 0; // Assuming a 2D circular motion in the XY plane
+            // Evaluate position on the circular path
+            var position = glMatrix.vec3.fromValues(x, y, z);
+            // Update the camera view matrix based on the new position
+            return position;
+        }
 
+        function updateCameraView() {
+            var new_Eye = getCameraPosition();
+            var new_Target = [0, 1, 0];
+            var new_Up = [0, 0, 1];
+            var envView = glMatrix.mat4.create();
+            envView = glMatrix.mat4.lookAt(envView, new_Eye, new_Target, new_Up);
+            return envView;
+        }
+        
 
         // our render function
         function render(time) {
-
             if (!previousTime)
                 previousTime = time;
 
@@ -227,6 +250,24 @@
             gl.cullFace(gl.BACK);
             gl.clearColor(environment.settings.background.r, environment.settings.background.g, environment.settings.background.b, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
+            var envView = envViewPre
+            if (!environment.settings.stopClicked)
+                envView = updateCameraView();
+                envViewPre = envView
+            if (environment.settings.addKeyFrameClicked){
+                keyframes.push(envView)
+                environment.settings.addKeyFrameClicked = false
+            } 
+            if (environment.settings.removeKeyFrameClicked){
+                keyframes.pop(envView)
+                environment.settings.removeKeyFrameClicked = false
+                if (keyframes.length!=0)
+                    envViewPre = keyframes[keyframes.length-1]
+            }
+
+
 
             // check whether some geometry is loaded already
             if (environment.scene.geometries) {
@@ -262,7 +303,7 @@
 
                 // some common matrices that might come in handy
                 const modelView = glMatrix.mat4.create();
-                glMatrix.mat4.multiply(modelView, environment.settings.view, model);
+                glMatrix.mat4.multiply(modelView, envView, model);
 
                 const inverseModelView = glMatrix.mat4.create();
                 glMatrix.mat4.invert(inverseModelView, modelView);
@@ -325,7 +366,6 @@
             // we continuously render frames
             requestAnimationFrame(render);
         }
-
     </script>
 
 </body>

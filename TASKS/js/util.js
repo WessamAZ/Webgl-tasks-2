@@ -10,13 +10,15 @@ function setupInterface(env) {
         pages: [
             { title: "General" },
             { title: "Objects" },
-            { title: "Materials" }
+            { title: "Materials" },
+            { title: "Animation" }
         ]
     });
 
     env.ui.generalPane = tab.pages[0];
     env.ui.objectsPane = tab.pages[1];
     env.ui.materialsPane = tab.pages[2];
+    env.ui.animationPane = tab.pages[3];
 
     env.ui.filePane = env.ui.generalPane.addFolder({
         title: "Files",
@@ -109,7 +111,6 @@ function setupInterface(env) {
         ],
         value: "",
     });
-
 }
 
 // bind our UI controls to the settings
@@ -188,6 +189,26 @@ function setupBindings(env) {
     env.ui.materialSelector.on("change", function (e) {
         updateMaterialSelector(env, e.value);
     });
+    // Animation:
+    env.ui.animationPane = env.ui.animationPane.addFolder({title: "Animation"});
+    env.ui.start = env.ui.animationPane.addButton({title: "Start"});
+    env.settings.startClicked = false;
+    env.ui.start.on("click", function () {
+        env.settings.startClicked = true;
+        env.settings.stopClicked = false;
+    });
+    env.ui.stop = env.ui.animationPane .addButton({title: "Stop"});
+    env.settings.stopClicked = false;
+    env.ui.stop.on("click", function () {
+        env.settings.stopClicked = true;
+        env.settings.startClicked = false;
+    }); 
+    env.ui.addKeyFrame = env.ui.animationPane.addButton({title: "Add-Keyframe"});
+        env.settings.addKeyFrameClicked = false;
+        env.ui.addKeyFrame.on("click", function () {env.settings.addKeyFrameClicked= true;});
+    env.ui.removeKeyFrame = env.ui.animationPane.addButton({title: "Remove-Keyframe"});
+        env.settings.removeKeyFrameClicked = false;
+        env.ui.removeKeyFrame.on("click", function () {env.settings.removeKeyframeClicked = true;});
 }
 
 // update object properties pane on selection change
@@ -276,7 +297,6 @@ function updateMaterialSelector(env, value) {
                 min: 1.0, max: 1000.0
             });
         }
-        
         Object.entries(m)
             .filter(([key]) => !key.startsWith("_") && key.endsWith("Map"))
             .forEach(([key]) => {

@@ -54,8 +54,10 @@ The fragment shader outputs the final color for each pixel.
 ## Assignment 3
 
 ### Assignment 3a
-<!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
-
+- I add the animation panel as a new panale in the uesr interface to control the stop and the start and the keyframs.
+- I create getCameraPosition to use in the cercile curve function to build the view camera curve  using updateCameraView function.
+- I used this function in the redner function to update camera view matrix all the time.
+- And the keyframes parameter is a list to add and remove the keyframes depends on the user inrface to control the keyframs.
 ### Assignment 3b
 <!-- Briefly describe your solution. If you did not solve the assignment, simply enter "Not solved." -->
 
